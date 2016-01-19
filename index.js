@@ -1,13 +1,19 @@
+//requires readline module that allows reading a stream line-by-line
 var rl, readline = require('readline');
 
+//gets an interface that is needed for readline
 var get_interface = function(stdin, stdout) {
   if (!rl) rl = readline.createInterface(stdin, stdout);
   else stdin.resume(); // interface exists
   return rl;
 }
-
+//confirms message and callback functions
+/* @param {string} message: confirmation message 
+* @param {string} callback: function that is activated after method is completed
+*/
 var confirm = exports.confirm = function(message, callback) {
 
+//initializes question 
   var question = {
     'reply': {
       type: 'confirm',
@@ -15,14 +21,17 @@ var confirm = exports.confirm = function(message, callback) {
       default: 'yes'
     }
   }
-
+//returns error if the question is unacceptable
   get(question, function(err, answer) {
     if (err) return callback(err);
     callback(null, answer.reply === true || answer.reply == 'yes');
   });
 
 };
-
+//get specific information by error checking and and returning appropriate response
+//@param {Array} options: Array of elements from which user chooses answer
+//@param {callback} callback: function that handles response
+//@returns: error message returned if the parameter message is not an object
 var get = exports.get = function(options, callback) {
 
   if (!callback) return; // no point in continuing
@@ -35,25 +44,29 @@ var get = exports.get = function(options, callback) {
       stdout = process.stdout,
       fields = Object.keys(options);
 
+//complete the interaction
   var done = function() {
     close_prompt();
     callback(null, answers);
   }
-
+//closes readline prompt
   var close_prompt = function() {
     stdin.pause();
     if (!rl) return;
     rl.close();
     rl = null;
   }
-
+//gets default option when enter key is pressed
+//@param {string} key: automatically assigned value
+//@param {string} partial_answers: user's answer
+//@returns {string}: options/default data for a given key
   var get_default = function(key, partial_answers) {
     if (typeof options[key] == 'object')
       return typeof options[key].default == 'function' ? options[key].default(partial_answers) : options[key].default;
     else
       return options[key];
   }
-
+//return true/false answer based on user's response
   var guess_type = function(reply) {
 
     if (reply.trim() == '')
@@ -68,6 +81,10 @@ var get = exports.get = function(options, callback) {
     return reply;
   }
 
+//validate user's response 
+//@param {string} key: automatically assigned value
+//@Param {string} answer: user's answer
+//@returns {Boolean}: answer was given so it should be
   var validate = function(key, answer) {
 
     if (typeof answer == 'undefined')
