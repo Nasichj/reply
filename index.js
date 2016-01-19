@@ -7,9 +7,10 @@ var get_interface = function(stdin, stdout) {
   else stdin.resume(); // interface exists
   return rl;
 }
-//confirms message and callback functions
-/* @param {string} message: confirmation message 
-* @param {string} callback: function that is activated after method is completed
+/*
+ * confirms message and callback functions
+ * @param {string} message: confirmation message 
+ * @param {string} callback: function that is activated after method is completed
 */
 var confirm = exports.confirm = function(message, callback) {
 
@@ -28,10 +29,12 @@ var confirm = exports.confirm = function(message, callback) {
   });
 
 };
-//get specific information by error checking and and returning appropriate response
-//@param {Array} options: Array of elements from which user chooses answer
-//@param {callback} callback: function that handles response
-//@returns: error message returned if the parameter message is not an object
+/*
+ * get specific information by error checking and and returning appropriate response
+ * @param {Array} options: Array of elements from which user chooses answer
+ * @param {callback} callback: function that handles response
+ * @returns: error message returned if the parameter message is not an object
+*/
 var get = exports.get = function(options, callback) {
 
   if (!callback) return; // no point in continuing
@@ -56,11 +59,14 @@ var get = exports.get = function(options, callback) {
     rl.close();
     rl = null;
   }
-//gets default option when enter key is pressed
-//@param {string} key: automatically assigned value
-//@param {string} partial_answers: user's answer
-//@returns {string}: options/default data for a given key
-  var get_default = function(key, partial_answers) {
+
+/*
+ * gets default option when enter key is pressed
+ * @param {string} key: automatically assigned value
+ * @param {string} partial_answers: user's answer
+ * @returns {string}: options/default data for a given key
+  */
+    var get_default = function(key, partial_answers) {
     if (typeof options[key] == 'object')
       return typeof options[key].default == 'function' ? options[key].default(partial_answers) : options[key].default;
     else
@@ -81,10 +87,12 @@ var get = exports.get = function(options, callback) {
     return reply;
   }
 
-//validate user's response 
-//@param {string} key: automatically assigned value
-//@Param {string} answer: user's answer
-//@returns {Boolean}: answer was given so it should be
+/*
+ * validate user's response 
+ * @param {string} key: automatically assigned value
+ * @Param {string} answer: user's answer
+ * @returns {Boolean}: answer was given so it should be
+  */
   var validate = function(key, answer) {
 
     if (typeof answer == 'undefined')
