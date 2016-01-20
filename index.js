@@ -110,6 +110,10 @@ var get = exports.get = function(options, callback) {
 
   }
 
+/*
+ * show error message and display valid response type
+ * @param {String} key: user input options
+ */
   var show_error = function(key) {
     var str = options[key].error ? options[key].error : 'Invalid value.';
 
@@ -119,6 +123,10 @@ var get = exports.get = function(options, callback) {
     stdout.write("\033[31m" + str + "\033[0m" + "\n");
   }
 
+/*
+ * display message of valid options
+ * @param {String} key: user input option
+ */ 
   var show_message = function(key) {
     var msg = '';
 
@@ -131,7 +139,11 @@ var get = exports.get = function(options, callback) {
     if (msg != '') stdout.write("\033[1m" + msg + "\033[0m\n");
   }
 
-  // taken from commander lib
+  /* taken from commander lib
+   * mask password after keypress
+   * @param {String} prompt: prompt for password
+   * @callback callback: callback function
+   */
   var wait_for_password = function(prompt, callback) {
 
     var buf = '',
@@ -163,6 +175,13 @@ var get = exports.get = function(options, callback) {
 
     stdin.on('keypress', keypress_callback);
   }
+/* validate user response by checking response type;
+ * if response is not valid show response
+ * @param {int} index: keeps track of question sequence
+ * @param {String} curr_key: current user input/response 
+ * @param {string} fallback: default answer
+ * @param {String} reply: user's response
+ */
 
   var check_reply = function(index, curr_key, fallback, reply) {
     var answer = guess_type(reply);
@@ -173,7 +192,11 @@ var get = exports.get = function(options, callback) {
     else
       show_error(curr_key) || next_question(index); // repeats current
   }
-
+/*
+ * Check if dependencies are met and return true or false
+ * @param {object} conditions: conditions that are required to be met
+ * @returns {Boolean} : true if dependencies are met, false if they are not
+ */
   var dependencies_met = function(conds) {
     for (var key in conds) {
       var cond = conds[key];
@@ -192,6 +215,13 @@ var get = exports.get = function(options, callback) {
     return true;
   }
 
+/*
+ * maintain question flow by asking one question after another till there is none
+ * @param {Number} index - index of current questions 
+ * @param {Number} prev_key - previous question key
+ * @param {String} answer - users' response 
+ * @returns {Function} next_question if any otherwise done
+   */
   var next_question = function(index, prev_key, answer) {
     if (prev_key) answers[prev_key] = answer;
 
@@ -238,7 +268,7 @@ var get = exports.get = function(options, callback) {
   rl = get_interface(stdin, stdout);
   next_question(0);
 
-  rl.on('close', function() {
+  rl.on('close', function() { // close prompt
     close_prompt(); // just in case
 
     var given_answers = Object.keys(answers).length;
