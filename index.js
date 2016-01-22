@@ -120,7 +120,7 @@ var get = exports.get = function(options, callback) {
     if (options[key].options)
         str += ' (options are ' + options[key].options.join(', ') + ')';
 
-    stdout.write("\033[31m" + str + "\033[0m" + "\n");
+    stdout.write("\0o33[31m" + str + "\0o33[0m" + "\n");
   }
 
 /*
@@ -136,7 +136,7 @@ var get = exports.get = function(options, callback) {
     if (options[key].options)
       msg += '(options are ' + options[key].options.join(', ') + ')';
 
-    if (msg != '') stdout.write("\033[1m" + msg + "\033[0m\n");
+    if (msg != '') stdout.write("\0o33[1m" + msg + "\0o33[0m\n");
   }
 
   /* taken from commander lib
@@ -165,7 +165,7 @@ var get = exports.get = function(options, callback) {
         buf = buf.substr(0, buf.length-1);
         var masked = '';
         for (i = 0; i < buf.length; i++) { masked += mask; }
-        stdout.write('\r\033[2K' + prompt + masked);
+        stdout.write('\r\0o33[2K' + prompt + masked);
       } else {
         stdout.write(mask);
         buf += c;
